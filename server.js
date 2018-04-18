@@ -1,6 +1,7 @@
+'use strict';
 
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line no-unused-vars
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
@@ -37,8 +38,8 @@ app.post('/shopping-list', jsonParser, (req, res) => {
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`
-      console.error(message);
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message); // eslint-disable-line no-console
       return res.status(400).send(message);
     }
   }
@@ -47,11 +48,26 @@ app.post('/shopping-list', jsonParser, (req, res) => {
   res.status(201).json(item);
 });
 
+app.post('/recipes', jsonParser, (req, res) => {
+  const requiredFields = ['name', 'ingredients'];
+  for (let i = 0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if(!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message); // eslint-disable-line no-console
+      return res.status(400).send(message);
+    }
+  }
+
+  const item = Recipes.create(req.body.name, req.body.ingredients);
+  res.status(201).json(item);
+});
+
 
 app.get('/recipes', (req, res) => {
   res.json(Recipes.get());
-})
+});
 
 app.listen(process.env.PORT || 8080, () => {
-  console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
+  console.log(`Your app is listening on port ${process.env.PORT || 8080}`); // eslint-disable-line no-console
 });
